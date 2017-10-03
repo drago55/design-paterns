@@ -1,4 +1,4 @@
-package main.singleton;
+package main.creational_design_pattern.singleton;
 
 
 /*
