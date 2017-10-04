@@ -53,9 +53,11 @@ public class Main {
 		ComputerPaternBuilder comp = new ComputerPaternBuilder.ComputerBuilder("500GB", "2 GB")
 				.setBluetoothEnabled(true).setGraphicsCardEnabled(true).build();
 	}
-	
+
 	private static void testAdapter() {
-		//
+		// Adapter pattern is one of the structural design pattern and its used so that
+		// two unrelated interfaces can work together.
+		// The object that join this unrelated interface is called an Adapter
 		TestAdapter.testClassAdapter();
 		TestAdapter.testObjectAdapter();
 	}
