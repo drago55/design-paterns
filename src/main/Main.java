@@ -8,6 +8,7 @@ import main.creational_design_pattern.factory.ServerFactory;
 import main.creational_design_pattern.singleton.InnerClassSingleton;
 import main.creational_design_pattern.singleton.Singleton;
 import main.creational_design_pattern.singleton.ThreadSafeSingleton;
+import main.structural_design_patterns.adapter.TestAdapter;
 
 public class Main {
 
@@ -17,6 +18,7 @@ public class Main {
 		showSingletonExamples();
 		testFactory();
 		testAbstractFactory();
+		testAdapter();
 
 	}
 
@@ -50,6 +52,12 @@ public class Main {
 	private static void testBuilder() {
 		ComputerPaternBuilder comp = new ComputerPaternBuilder.ComputerBuilder("500GB", "2 GB")
 				.setBluetoothEnabled(true).setGraphicsCardEnabled(true).build();
+	}
+	
+	private static void testAdapter() {
+		//
+		TestAdapter.testClassAdapter();
+		TestAdapter.testObjectAdapter();
 	}
 
 }
