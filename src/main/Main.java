@@ -10,9 +10,12 @@ import main.creational_design_pattern.singleton.Singleton;
 import main.creational_design_pattern.singleton.ThreadSafeSingleton;
 import main.structural_design_patterns.adapter.TestAdapter;
 import main.structural_design_patterns.composit.TestComposit;
+import main.structural_design_patterns.flyweight.DrawingClient;
+import main.structural_design_patterns.proxy.ProxyPatternTest;
 
 public class Main {
-
+	
+	static DrawingClient draw;
 	public static void main(String[] args) {
 
 		System.out.println("Hello World!"); // Display the string.
@@ -21,6 +24,9 @@ public class Main {
 		testAbstractFactory();
 		testAdapter();
 		testComposit();
+		testProxy();
+		
+		//draw= new DrawingClient(300, 300);
 
 	}
 
@@ -69,6 +75,12 @@ public class Main {
 		// of objects should behave as the single object
 		// Composite pattern can be used to create tree like structure
 		TestComposit.testComposit();
+	}
+
+	private static void testProxy() {
+		//Proxy is one of the Structural design pattern 
+		//Proxy is used when we want to provide controlled access of a functionality  
+		ProxyPatternTest.testProxy();
 	}
 
 }
