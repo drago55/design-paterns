@@ -9,6 +9,7 @@ import main.creational_design_pattern.singleton.InnerClassSingleton;
 import main.creational_design_pattern.singleton.Singleton;
 import main.creational_design_pattern.singleton.ThreadSafeSingleton;
 import main.structural_design_patterns.adapter.TestAdapter;
+import main.structural_design_patterns.composit.TestComposit;
 
 public class Main {
 
@@ -19,6 +20,7 @@ public class Main {
 		testFactory();
 		testAbstractFactory();
 		testAdapter();
+		testComposit();
 
 	}
 
@@ -60,6 +62,13 @@ public class Main {
 		// The object that join this unrelated interface is called an Adapter
 		TestAdapter.testClassAdapter();
 		TestAdapter.testObjectAdapter();
+	}
+
+	private static void testComposit() {
+		// Composite pattern should be applied only when the group
+		// of objects should behave as the single object
+		// Composite pattern can be used to create tree like structure
+		TestComposit.testComposit();
 	}
 
 }
