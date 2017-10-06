@@ -1,8 +1,14 @@
 package main;
 
-import java.awt.Color;
 import java.sql.Connection;
 
+import main.behavior_design_patterns.mediator.ChatMediator;
+import main.behavior_design_patterns.mediator.ChatMediatorImpl;
+import main.behavior_design_patterns.mediator.User;
+import main.behavior_design_patterns.mediator.UserImpl;
+import main.behavior_design_patterns.template_method.GlassHouse;
+import main.behavior_design_patterns.template_method.HouseTemplate;
+import main.behavior_design_patterns.template_method.WoodenHouse;
 import main.creational_design_pattern.builder.ComputerPaternBuilder;
 import main.creational_design_pattern.factory.Computer;
 import main.creational_design_pattern.factory.ComputerFactory;
@@ -18,6 +24,10 @@ import main.structural_design_patterns.bridge.RedColor;
 import main.structural_design_patterns.bridge.Shape;
 import main.structural_design_patterns.bridge.Triangle;
 import main.structural_design_patterns.composit.TestComposit;
+import main.structural_design_patterns.decorator.BasicCar;
+import main.structural_design_patterns.decorator.Car;
+import main.structural_design_patterns.decorator.LuxuryCar;
+import main.structural_design_patterns.decorator.SportsCar;
 import main.structural_design_patterns.facade.HelperFacade;
 import main.structural_design_patterns.facade.MySqlHelper;
 import main.structural_design_patterns.facade.OracleHelper;
@@ -41,6 +51,9 @@ public class Main {
 		// draw = new DrawingClient(1000, 1000);
 		testFacadePattern();
 		testBridge();
+		testDecoratorPattern();
+		testTemplateMethod();
+		testMediator();
 	}
 
 	private static void showSingletonExamples() {
@@ -116,10 +129,52 @@ public class Main {
 	}
 
 	private static void testBridge() {
+		// Bridge design pattern can be used when both abstraction and implementation
+		// can have different hierarchies independently and we want
+		// to hide the implementation from the client
 		Shape tri = new Triangle(new RedColor());
 		tri.applyColor();
 		Shape pent = new Pentagon(new GreenColor());
 		pent.applyColor();
+
+	}
+
+	private static void testDecoratorPattern() {
+
+		Car sportsCar = new SportsCar(new BasicCar());
+		sportsCar.assemble();
+		System.out.print("\n*****");
+		Car sportsLuxuryCar = new SportsCar(new LuxuryCar(new BasicCar()));
+		sportsLuxuryCar.assemble();
+	}
+
+	private static void testTemplateMethod() {
+		// Template Method is a behavioral design pattern and its used to create
+		// method stub and deferring some of the steps of implementation to the
+		// subclasses
+		HouseTemplate houseType = new WoodenHouse();
+		houseType.buildHouse();
+		System.out.println("*********************");
+		houseType = new GlassHouse();
+		houseType.buildHouse();
+	}
+
+	private static void testMediator() {
+		// Mediator pattern is one of the behavioral design pattern so it deals
+		// behaviors of objects
+		// Mediator is used to provide a centralized communication medium between
+		// different objects in a system
+		ChatMediator mediator = new ChatMediatorImpl();
+		User user1 = new UserImpl(mediator, "Pankaj");
+		User user2 = new UserImpl(mediator, "Lisa");
+		User user3 = new UserImpl(mediator, "Saurabh");
+		User user4 = new UserImpl(mediator, "David");
+		mediator.addUser(user1);
+		mediator.addUser(user2);
+		mediator.addUser(user3);
+		mediator.addUser(user4);
+
+		user1.send("Hi all");
 
 	}
 }
