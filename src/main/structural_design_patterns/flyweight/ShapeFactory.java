@@ -7,6 +7,7 @@ public class ShapeFactory {
 	private static final HashMap shapes = new HashMap();
 	
 	public static Shape getShape(ShapeType type) {
+		//We are reusing object from HashMap
 		Shape shapeImpl=(Shape) shapes.get(type);
 		if(shapeImpl==null) {
 			if(type.equals(ShapeType.OVAL_FILL)){
