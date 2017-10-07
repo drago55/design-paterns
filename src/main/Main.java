@@ -1,11 +1,27 @@
 package main;
 
 import java.sql.Connection;
+import java.util.Scanner;
 
+import main.behavior_design_patterns.chain_of_responsability.ATMDispenseChain;
+import main.behavior_design_patterns.chain_of_responsability.Currency;
+import main.behavior_design_patterns.command.CloseFileCommand;
+import main.behavior_design_patterns.command.FileInvoker;
+import main.behavior_design_patterns.command.FileSystemReciver;
+import main.behavior_design_patterns.command.FileSystemReciverUtil;
+import main.behavior_design_patterns.command.OpenFileCommand;
+import main.behavior_design_patterns.command.WriteFileCommand;
 import main.behavior_design_patterns.mediator.ChatMediator;
 import main.behavior_design_patterns.mediator.ChatMediatorImpl;
 import main.behavior_design_patterns.mediator.User;
 import main.behavior_design_patterns.mediator.UserImpl;
+import main.behavior_design_patterns.observer.MyTopic;
+import main.behavior_design_patterns.observer.MyTopicSubscriber;
+import main.behavior_design_patterns.observer.Observer;
+import main.behavior_design_patterns.strategy.CreditCardStrategy;
+import main.behavior_design_patterns.strategy.Item;
+import main.behavior_design_patterns.strategy.PaypalStrategy;
+import main.behavior_design_patterns.strategy.ShopingCart;
 import main.behavior_design_patterns.template_method.GlassHouse;
 import main.behavior_design_patterns.template_method.HouseTemplate;
 import main.behavior_design_patterns.template_method.WoodenHouse;
@@ -56,6 +72,12 @@ public class Main {
 		testDecoratorPattern();
 		testTemplateMethod();
 		testMediator();
+		// Uncomment to test chain of responsibility
+		// testChainOfResponsability();
+		testObserverPattern();
+		testStrategyPattern();
+		testCommand();
+
 	}
 
 	private static void showSingletonExamples() {
@@ -181,6 +203,86 @@ public class Main {
 		mediator.addUser(user4);
 
 		user1.send("Hi all");
+
+	}
+
+	private static void testChainOfResponsability() {
+		// Chain of responsibility design pattern is used to achive lose coupling
+		// in software design where a request from client is
+		// passed to chain of objects to process them
+
+		ATMDispenseChain atmDispenseChain = new ATMDispenseChain();
+		boolean i = true;
+		while (i) {
+			int amount = 0;
+			System.out.println("Enter amount to dispense");
+			Scanner input = new Scanner(System.in);
+			amount = input.nextInt();
+			if (amount % 10 != 0) {
+				System.out.println("amount should be in multiple of 10s.");
+				return;
+			}
+			atmDispenseChain.c1.dispense(new Currency(amount));
+			i = false;
+		}
+	}
+
+	private static void testObserverPattern() {
+		// Observer design pattern is useful when you are interested in state of object
+		// and want to get notified whenever there is any change.
+		// In observer pattern the object that watch on the state of another object are
+		// called Observer and
+		// the object that is being watched is called Subject.
+		MyTopic topic = new MyTopic();
+		Observer obj1 = new MyTopicSubscriber("Obj1");
+		Observer obj2 = new MyTopicSubscriber("Obj2");
+		Observer obj3 = new MyTopicSubscriber("Obj3");
+		topic.register(obj1);
+		topic.register(obj2);
+		topic.register(obj3);
+		obj1.setSubject(topic);
+		obj2.setSubject(topic);
+		obj3.setSubject(topic);
+		obj1.update();
+		topic.postMessage("New Message");
+
+	}
+
+	private static void testStrategyPattern() {
+		// Strategy pattern is used when have multiple
+		// algorithm for a specific task and client
+
+		ShopingCart cart = new ShopingCart();
+		Item item1 = new Item("1234", 14);
+		Item item2 = new Item("1455", 24);
+		Item item3 = new Item("5532", 40);
+
+		cart.addItem(item1);
+		cart.addItem(item2);
+		cart.addItem(item3);
+
+		cart.pay(new PaypalStrategy("someone@domain.com", "myPasssw"));
+		cart.pay(new CreditCardStrategy("Some one ", "12345678912334567", "214", "12/15"));
+	}
+
+	private static void testCommand() {
+		/*
+		 * Command pattern is one of the behavior design patterns and its used to
+		 * implement lose coupling in a request-response model. In command pattern
+		 * command is sent to the invoker pass it to the encapsulated command object
+		 * Command object pass the request to the appropriate method of receiver object
+		 * and then attach it to the command
+		 */
+		FileSystemReciver fs = FileSystemReciverUtil.getUnderlyingFileSystem();
+		OpenFileCommand openFileCommand = new OpenFileCommand(fs);
+		FileInvoker file = new FileInvoker(openFileCommand);
+		file.execute();
+		CloseFileCommand closeFileCommand = new CloseFileCommand(fs);
+		file = new FileInvoker(closeFileCommand);
+		file.execute();
+		WriteFileCommand writeFileCommand = new WriteFileCommand(fs);
+		file = new FileInvoker(writeFileCommand);
+		file.execute();
 
 	}
 }
