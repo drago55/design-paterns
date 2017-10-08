@@ -11,6 +11,9 @@ import main.behavior_design_patterns.command.FileSystemReciver;
 import main.behavior_design_patterns.command.FileSystemReciverUtil;
 import main.behavior_design_patterns.command.OpenFileCommand;
 import main.behavior_design_patterns.command.WriteFileCommand;
+import main.behavior_design_patterns.interpreter.InterpereteClient;
+import main.behavior_design_patterns.interpreter.InterpreterContext;
+import main.behavior_design_patterns.iterator.IteratorPatternTest;
 import main.behavior_design_patterns.mediator.ChatMediator;
 import main.behavior_design_patterns.mediator.ChatMediatorImpl;
 import main.behavior_design_patterns.mediator.User;
@@ -18,6 +21,11 @@ import main.behavior_design_patterns.mediator.UserImpl;
 import main.behavior_design_patterns.observer.MyTopic;
 import main.behavior_design_patterns.observer.MyTopicSubscriber;
 import main.behavior_design_patterns.observer.Observer;
+import main.behavior_design_patterns.state.State;
+import main.behavior_design_patterns.state.TVContext;
+import main.behavior_design_patterns.state.TVRemoteBasic;
+import main.behavior_design_patterns.state.TVStartState;
+import main.behavior_design_patterns.state.TVStopState;
 import main.behavior_design_patterns.strategy.CreditCardStrategy;
 import main.behavior_design_patterns.strategy.Item;
 import main.behavior_design_patterns.strategy.PaypalStrategy;
@@ -25,6 +33,11 @@ import main.behavior_design_patterns.strategy.ShopingCart;
 import main.behavior_design_patterns.template_method.GlassHouse;
 import main.behavior_design_patterns.template_method.HouseTemplate;
 import main.behavior_design_patterns.template_method.WoodenHouse;
+import main.behavior_design_patterns.visitor.Book;
+import main.behavior_design_patterns.visitor.Fruit;
+import main.behavior_design_patterns.visitor.ItemElement;
+import main.behavior_design_patterns.visitor.ShoppingCartVisitor;
+import main.behavior_design_patterns.visitor.ShoppingCartVisitorImpl;
 import main.creational_design_pattern.builder.ComputerPaternBuilder;
 import main.creational_design_pattern.factory.Computer;
 import main.creational_design_pattern.factory.ComputerFactory;
@@ -77,6 +90,11 @@ public class Main {
 		testObserverPattern();
 		testStrategyPattern();
 		testCommand();
+		testTVRemoteBasic();
+		testStatePattern();
+		testVisitorPattern();
+		testInterpreter();
+		testIterator();
 
 	}
 
@@ -284,5 +302,76 @@ public class Main {
 		file = new FileInvoker(writeFileCommand);
 		file.execute();
 
+	}
+
+	private static void testTVRemoteBasic() {
+		// This is implementation of state without pattern
+		TVRemoteBasic remote = new TVRemoteBasic();
+		remote.setState("ON");
+		remote.doAction();
+		remote.setState("OFF");
+		remote.doAction();
+
+	}
+
+	private static void testStatePattern() {
+		/*
+		 * The output is the same as with basicRemote implementation But the benefits of
+		 * implementing polymorphic behavior is clearly visible the chance of error are
+		 * less and its very easy to add more states for additional behavior making it
+		 * more robust easily maintainable and flexible. Also state pattern helped to
+		 * avoid switch or if else logic statements
+		 */
+		TVContext context = new TVContext();
+		State tvStartState = new TVStartState();
+		State tvStopState = new TVStopState();
+
+		context.setTvState(tvStartState);
+		context.doAction();
+		context.setTvState(tvStopState);
+		context.doAction();
+	}
+
+	private static void testVisitorPattern() {
+
+		/*
+		 * The benefit of this pattern is that if the logic of operation changes, then
+		 * we need to make changes only in the visitor implementation rather than doing
+		 * it in all the item classes
+		 */
+		ItemElement[] items = new ItemElement[] { new Book(20, "1234"), new Book(100, "5678"),
+				new Fruit(10, 2, "banana"), new Fruit(5, 5, "Apple") };
+
+		int total = calculatePrice(items);
+		System.out.println("Total Cost =" + total);
+
+	}
+
+	private static int calculatePrice(ItemElement[] items) {
+		ShoppingCartVisitor visitor = new ShoppingCartVisitorImpl();
+		int sum = 0;
+
+		for (ItemElement item : items) {
+			sum = sum + item.accept(visitor);
+		}
+		return sum;
+	}
+
+	private static void testInterpreter() {
+		String str1 = "28 in Binary";
+		String str2 = "28 in Hexadecimal";
+		InterpereteClient ec = new InterpereteClient(new InterpreterContext());
+		System.out.println(str1 + "+ " + ec.interpret(str1));
+		System.out.println(str2 + "+ " + ec.interpret(str2));
+	}
+
+	private static void testIterator() {
+		/*
+		 * Iterator pattern is useful when you want to provide standard way to iterate
+		 * over collection and hide the implementation from client program The logic for
+		 * iteration is embedded in the collection itself and it helps client program to
+		 * iterate over them easily
+		 */
+		IteratorPatternTest.testIterator();
 	}
 }
