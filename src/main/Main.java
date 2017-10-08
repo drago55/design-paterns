@@ -18,6 +18,8 @@ import main.behavior_design_patterns.mediator.ChatMediator;
 import main.behavior_design_patterns.mediator.ChatMediatorImpl;
 import main.behavior_design_patterns.mediator.User;
 import main.behavior_design_patterns.mediator.UserImpl;
+import main.behavior_design_patterns.memento.FileWriterCaretaker;
+import main.behavior_design_patterns.memento.FileWriterUtil;
 import main.behavior_design_patterns.observer.MyTopic;
 import main.behavior_design_patterns.observer.MyTopicSubscriber;
 import main.behavior_design_patterns.observer.Observer;
@@ -95,7 +97,7 @@ public class Main {
 		testVisitorPattern();
 		testInterpreter();
 		testIterator();
-
+		testMemento();
 	}
 
 	private static void showSingletonExamples() {
@@ -373,5 +375,23 @@ public class Main {
 		 * iterate over them easily
 		 */
 		IteratorPatternTest.testIterator();
+	}
+
+	private static void testMemento() {
+		/*
+		 * Memento design pattern i used when we want to save the state of an object so
+		 * that we can restore later on.
+		 */
+
+		FileWriterCaretaker caretaker = new FileWriterCaretaker();
+		FileWriterUtil fileWriter = new FileWriterUtil("data.txt");
+		fileWriter.write("First set of data");
+		System.out.println(fileWriter);
+		caretaker.save(fileWriter);
+		fileWriter.write("Second Set of Data");
+		System.out.println(fileWriter);
+		caretaker.undo(fileWriter);
+		System.out.println(fileWriter);
+
 	}
 }
